@@ -1,0 +1,52 @@
+using System;
+class Processor
+{
+    public string Proc { get; set; }
+    public int Chastota { get; set; }
+    public string Ram { get; set; }
+    public string Type { get; set; }
+    public Processor()
+    {
+        Proc = string.Empty;
+        Chastota = 0;
+        Ram = string.Empty;
+        Type = string.Empty;
+    }
+    public Processor(string Proc, int Chastota, string Ram, string Type)
+    {
+        this.Proc = Proc;
+        this.Chastota = Chastota;
+        this.Ram = Ram;
+        this.Type = Type;
+    }
+    public Processor(Processor other)
+    {
+        Proc = other.Proc;
+        Chastota = other.Chastota;
+        Ram = other.Ram;
+        Type = other.Type;
+    }
+    public void show()
+    {
+        string ramValue = string.IsNullOrEmpty(Ram) ? string.Empty : Ram;
+        string typeValue = string.IsNullOrEmpty(Type) ? string.Empty : Type;
+        Console.WriteLine($"| {Proc,-15} | {Chastota,-14} | {ramValue,-8} | {typeValue,-3} |");
+    }
+}
+class Program
+{
+    static void Main()
+    {
+        List<Processor> processors = new List<Processor>()
+        {
+                new Processor("Pentium-III", 233, "", "C"),
+                new Processor("AMD-K6", 166, "", "C"),
+                new Processor("PowerPC-620", 2000, "", "R")
+        };
+        Console.WriteLine("| Процесор        | Частота (Mgz)  | RAM (Mb) | Тип |");
+        foreach(Processor processor in processors)
+        {
+            processor.show();
+        }
+    }
+}

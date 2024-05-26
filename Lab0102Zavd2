@@ -1,0 +1,119 @@
+using System;
+class Processor
+{
+    public static int count = 0;
+    public string Proc { get; set; }
+    public int Chastota { get; set; }
+    public string Ram { get; set; }
+    public string Type { get; set; }
+    public Processor(string Proc = "", int Chastota = 0, string Ram = "", string Type ="")
+    {
+        this.Proc = Proc;
+        this.Chastota = Chastota;
+        this.Ram = Ram;
+        this.Type = Type;
+        count++;
+    }
+    public Processor(Processor other)
+    {
+        Proc = other.Proc;
+        Chastota = other.Chastota;
+        Ram = other.Ram;
+        Type = other.Type;
+    }
+    public void show()
+    {
+        string ramValue = string.IsNullOrEmpty(Ram) ? string.Empty : Ram;
+        string typeValue = string.IsNullOrEmpty(Type) ? string.Empty : Type;
+        Console.WriteLine($"| {Proc,-15} | {Chastota,-14} | {ramValue,-8} | {typeValue,-3} |");
+    }
+}
+class ProcessorArray
+{
+    public Processor[] Processors { get; set; }
+    int currentIndex = 0;
+    public ProcessorArray(int size)
+    {
+        Processors = new Processor[size];
+    }
+    public void AddProcessor(Processor processor)
+    {
+        if (currentIndex < Processors.Length)
+        {
+            Processors[currentIndex] = processor;
+            currentIndex++;
+        }
+        else
+        {
+            Console.WriteLine("Масив процесорiв переповнений.");
+        }
+    }
+    public void ShowAll()
+    {
+        Console.WriteLine("| Процесор        | Частота (Mgz)  | RAM (Mb) | Тип |");
+        foreach (Processor processor in Processors)
+        {
+            if (processor != null)
+            {
+                processor.show();
+            }
+        }
+    }
+    public Processor[] FindByChastota(int minChastota)
+    {
+        Processor[] result = new Processor[Processors.Length];
+        int count = 0;
+        Console.WriteLine("| Процесор        | Частота (Mgz)  | RAM (Mb) | Тип |");
+        foreach (Processor processor in Processors)
+        {
+            if (processor != null && processor.Chastota > minChastota)
+            {
+                result[count] = processor;
+                count++;
+            }
+        }
+        Array.Resize(ref result, count);
+        return result;
+    }
+}
+class Program
+{
+    static void Main()
+    {
+        ProcessorArray processorArray = new ProcessorArray(10);
+        processorArray.AddProcessor(new Processor("Pentium-III", 233, "", "C"));
+        processorArray.AddProcessor(new Processor("AMD-K6", 166, "", "C"));
+        processorArray.AddProcessor(new Processor("PowerPC-620", 2000, "", "R"));
+        processorArray.AddProcessor(new Processor("Intel i5", 2500, "8192", "L"));
+        processorArray.AddProcessor(new Processor("AMD Ryzen 5", 3600, "16384", "L"));
+        processorArray.AddProcessor(new Processor("Intel i7", 3400, "8192", "L"));
+        processorArray.AddProcessor(new Processor("AMD Ryzen 7", 3800, "32768", "L"));
+        processorArray.AddProcessor(new Processor("Intel i9", 3900, "16384", "L"));
+        processorArray.AddProcessor(new Processor("Pentium 4", 2800, "1024", "C"));
+        processorArray.AddProcessor(new Processor("Athlon XP", 2200, "2048", "C"));
+        processorArray.ShowAll();
+        Console.WriteLine("\nПроцесори з частотою бiльше 3000 Mgz:");
+        Processor[] fastProcessors = processorArray.FindByChastota(3000);
+        foreach (Processor processor in fastProcessors)
+        {
+            if (processor != null)
+            {
+                processor.show();
+            }
+        }
+        const int maxObjects = 10;
+        const int minObjects = 3;
+        if (Processor.count > maxObjects)
+        {
+            Console.WriteLine("Кiлькiсть процесорiв перевищує граничне значення.");
+        }
+        else if (Processor.count < minObjects)
+        {
+            Console.WriteLine("Кiлькiсть процесорiв менше граничного значення.");
+        }
+        else
+        {
+            Console.WriteLine("Кiлькiсть процесорiв у межах допустимих значень.");
+        }
+    }
+}

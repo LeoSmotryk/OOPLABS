@@ -1,0 +1,98 @@
+using System;
+public class User
+{
+    protected string name;
+    protected int age;
+    public void setName(string name)
+    {
+        this.name = name;
+    }
+    public string getName()
+    {
+        return name;
+    }
+    public void setAge(int age)
+    {
+        this.age = age;
+    }
+    public int getAge()
+    {
+        return age;
+    }
+}
+public class Worker : User
+{
+    private int salary;
+    public void setSalary(int salary)
+    {
+        this.salary = salary;
+    }
+    public int getSalary()
+    {
+        return salary;
+    }
+}
+public class Student : User
+{
+    private int scholarship;
+    private int course;
+    public void setScholarship(int scholarship)
+    {
+        this.scholarship = scholarship;
+    }
+    public int getScholarship()
+    {
+        return scholarship;
+    }
+    public void setCourse(int course)
+    {
+        this.course = course;
+    }
+    public int getCourse()
+    {
+        return course;
+    }
+}
+public class Driver : Worker
+{
+    private int drivingExperience;
+    private char drivingCategory;
+    public void setDrivingExperience(int drivingExperience)
+    {
+        this.drivingExperience = drivingExperience;
+    }
+    public int getDrivingExperience()
+    {
+        return drivingExperience;
+    }
+    public void setDrivingCategory(char drivingCategory)
+    {
+        this.drivingCategory = drivingCategory;
+    }
+    public char getDrivingCategory()
+    {
+        return drivingCategory;
+    }
+}
+public class Program
+{
+    public static void Main()
+    {
+        Worker i = new Worker();
+        i.setName("Iван");
+        i.setAge(25);
+        i.setSalary(1000);
+        Console.WriteLine("Iм'я: " + i.getName());
+        Console.WriteLine("Вiк: " + i.getAge());
+        Console.WriteLine("Зарплатня: " + i.getSalary());
+        Worker v = new Worker();
+        v.setName("Вася");
+        v.setAge(26);
+        v.setSalary(2000);
+        Console.WriteLine("Iм'я: " + v.getName());
+        Console.WriteLine("Вiк: " + v.getAge());
+        Console.WriteLine("Зарплатня: " + v.getSalary());
+        int totalSalary = i.getSalary() + v.getSalary();
+        Console.WriteLine("Сума зарплат Iвана i Васi: " + totalSalary);
+    }
+}

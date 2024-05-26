@@ -1,0 +1,71 @@
+using System;
+public class Time
+{
+    public int hours { get; set; }
+    public int minutes { get; set; }
+    public int seconds { get; set; }
+    public Time(int hours = 0, int minutes = 0, int seconds = 0)
+    {
+        this.hours = hours;
+        this.minutes = minutes;
+        this.seconds = seconds;
+    }
+    public int povniminutes()
+    {
+        int pm = 60 * hours + minutes;
+        return pm;
+    }
+    public void minutesminusten()
+    {
+        if (minutes >= 10)
+            minutes = minutes - 10;
+        else
+        {
+            hours = hours - 1;
+            minutes = minutes + 50;
+        }
+    }
+    public void vyvidryadka()
+    {
+        Console.WriteLine($"Час: {hours}:{minutes}:{seconds}");
+    }
+}
+public class Abonent : Time
+{
+    private string surname;
+    private string operatorzvyazku;
+    public Abonent(string surname = "", string operatorzvyazku = "", int hours = 0, int minutes = 0, int seconds = 0)
+    {
+        this.surname = surname;
+        this.operatorzvyazku = operatorzvyazku;
+        this.hours = hours;
+        this.minutes = minutes;
+        this.seconds = seconds;
+    }
+    public void pilhovyichas()
+    {
+        if(hours >= 0 && hours < 8)
+            Console.WriteLine("Час є пiльговим для абонента.");
+        else
+            Console.WriteLine("Час не є пiльговим для абонента.");
+    }
+    public void vyvidryadka()
+    {
+        Console.WriteLine("| Абонент   | Оператор  | Поточний час|");
+        Console.WriteLine($"| {surname,-9} | {operatorzvyazku,-9} | {hours}:{minutes}:{seconds,-6} |");
+    }
+}
+public class Program
+{
+    public static void Main()
+    {
+        Time t = new Time(10, 8, 37);
+        t.vyvidryadka();
+        Console.WriteLine("Повнi хвилини: " + t.povniminutes());
+        t.minutesminusten();
+        Console.WriteLine($"Час зменшений на 10 хвилин: {t.hours}:{t.minutes}:{t.seconds}");
+        Abonent a = new Abonent("Черватюк", "Київстар", 7, 34, 21);
+        a.vyvidryadka();
+        a.pilhovyichas();
+    }
+}

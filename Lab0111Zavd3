@@ -1,0 +1,22 @@
+using System;
+using System.Linq;
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Введiть рядок з трьома рiзними датами у форматi дд.мм.рррр, роздiленi комою:");
+        string str = Console.ReadLine();
+        string[] str1 = str.Split(',');
+        DateTime[] dates = new DateTime[str1.Length];
+        for (int i = 0; i < str1.Length; i++)
+            dates[i] = DateTime.ParseExact(str1[i].Trim(), "dd.MM.yyyy", null);
+        int minYear = dates.Min(date => date.Year);
+        Console.WriteLine($"Рiк з найменшим номером: {minYear}");
+        var springDates = dates.Where(date => date.Month >= 3 && date.Month <= 5);
+        Console.WriteLine("Всi веснянi дати:");
+        foreach (var date in springDates)
+            Console.WriteLine(date.ToString("dd.MM.yyyy"));
+        DateTime latestDate = dates.Max();
+        Console.WriteLine($"Сама пiзня дата: {latestDate.ToString("dd.MM.yyyy")}");
+    }
+}

@@ -1,0 +1,22 @@
+using System;
+class Program
+{
+    static void Main()
+    {
+        Console.Write("Введiть дату: ");
+        string str = Console.ReadLine();
+        if (!DateTime.TryParse(str, out DateTime inputDate))
+        {
+            Console.WriteLine("Неправильно введена дата.");
+            return;
+        }
+        DateTime currentDate = DateTime.Today;
+        TimeSpan remainingDays = inputDate - currentDate;
+        if (remainingDays.TotalDays < 0)
+            Console.WriteLine("Цей день вже минув.");
+        else if (remainingDays.TotalDays == 0)
+            Console.WriteLine("Цей день сьогоднi.");
+        else
+            Console.WriteLine($"До вказаної дати залишилось {remainingDays.Days} днiв.");
+    }
+}

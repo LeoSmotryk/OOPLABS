@@ -1,0 +1,30 @@
+using System;
+class Program
+{
+    static void Main()
+    {
+        Console.Write("Введiть рядок: ");
+        string str = Console.ReadLine();
+        Console.Write("Введiть початкову позицiю: ");
+        int a;
+        while (!int.TryParse(Console.ReadLine(), out a) || a <= 0 || a > str.Length)
+        {
+            Console.WriteLine("Неправильна позицiя.");
+            return;
+        }
+        string result = ReplaceBits(str, a);
+        Console.WriteLine("Результат: " + result);
+    }
+    static string ReplaceBits(string str, int a)
+    {
+        char[] charArray = str.ToCharArray();
+        for (int i = a - 1; i < charArray.Length; i++)
+        {
+            if (charArray[i] == '1')
+                charArray[i] = '0';
+            else if (charArray[i] == '0')
+                charArray[i] = '1';
+        }
+        return new string(charArray);
+    }
+}

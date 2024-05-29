@@ -1,0 +1,43 @@
+using System;
+using System.IO;
+namespace HelloApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            katCreate(@"D:\OOP_lab08");
+            katCreate(@"D:\OOP_lab08\KN1-B22");
+            katCreate(@"D:\OOP_lab08\Smotrykovskyi");
+            katCreate(@"D:\OOP_lab08\Sources");
+            katCreate(@"D:\OOP_lab08\Reports");
+            katCreate(@"D:\OOP_lab08\Texts");
+            katMove(@"D:\OOP_lab08\Sources", @"D:\OOP_lab08\Smotrykovskyi\Sources");
+            katMove(@"D:\OOP_lab08\Reports", @"D:\OOP_lab08\Smotrykovskyi\Reports");
+            katMove(@"D:\OOP_lab08\Texts", @"D:\OOP_lab08\Smotrykovskyi\Texts");
+            katMove(@"D:\OOP_lab08\Smotrykovskyi", @"D:\OOP_lab08\KN1-B22\Smotrykovskyi");
+            string dirPath = @"D:\OOP_lab08\KN1-B22\Smotrykovskyi\Texts\dirinfo.txt";
+            using (StreamWriter writer = new StreamWriter(dirPath))
+            {
+                DirectoryInfo dirInfo = new DirectoryInfo(@"D:\OOP_lab08\KN1-B22\Smotrykovskyi\Texts");
+                writer.WriteLine($"Назва каталогу: {dirInfo.Name}");
+                writer.WriteLine($"Повна назва каталогу: {dirInfo.FullName}");
+                writer.WriteLine($"Час створення каталогу: {dirInfo.CreationTime}");
+                writer.WriteLine($"Кореневий каталог: {dirInfo.Root}");
+            }
+            Console.WriteLine("Програма виконана");
+        }
+        static void katCreate(string path)
+        {
+            DirectoryInfo kat = new DirectoryInfo(path);
+            if (!kat.Exists)
+                kat.Create();
+        }
+        static void katMove(string oldPath, string newPath)
+        {
+            DirectoryInfo dirInfo = new DirectoryInfo(oldPath);
+            if (dirInfo.Exists && Directory.Exists(newPath) == false)
+                dirInfo.MoveTo(newPath);
+        }
+    }
+}

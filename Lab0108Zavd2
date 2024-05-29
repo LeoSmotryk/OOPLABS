@@ -1,0 +1,27 @@
+using System;
+using System.IO;
+namespace HelloApp
+{
+    class Program
+    {
+        static void Main()
+        {
+            Console.WriteLine("Введiть число: ");
+            string str = Console.ReadLine();
+            double e = double.Parse(str);
+            string dirPath = @"D:\h.txt";
+            using (StreamWriter writer = new StreamWriter(dirPath))
+            {
+                double x;
+                int i = 1;
+                do
+                {
+                    x = (i - 0.1) / (Math.Pow(i, 3) + Math.Abs(Math.Tan(2 * i)));
+                    i++;
+                    writer.WriteLine(x);
+                } while (Math.Abs(x) >= e);
+            }
+            Console.WriteLine("Програма виконана");
+        }
+    }
+}

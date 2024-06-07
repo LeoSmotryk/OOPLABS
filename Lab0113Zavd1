@@ -1,0 +1,17 @@
+namespace WinFormsApp21
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons)
+            {
+                this.WindowState = FormWindowState.Minimized;
+            }
+        }
+    }
+}

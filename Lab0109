@@ -1,0 +1,45 @@
+using System;
+delegate double Function(double x);
+class ChordMethod
+{
+    public Function f;
+    public ChordMethod(Function funct)
+    {
+        f = funct;
+    }
+    public double FindRoot(double a, double b, double t = 0.001, int maxI = 100)
+    {
+        double fa = f(a);
+        double fb = f(b);
+        int i = 0;
+        while (Math.Abs(fa) > t && i < maxI)
+        {
+            double x = a - fa * (b - a) / (fb - fa);
+            a = b;
+            fa = fb;
+            b = x;
+            fb = f(x);
+            i++;
+        }
+        if (i == maxI)
+            throw new Exception("Кореня немає.");
+        return b;
+    }
+}
+public class Rivnyannya
+{
+    public static void Main()
+    {
+        Function f = x => x * x * x - 0.1 * x * x + 0.4 * x - 1.5;
+        ChordMethod solve = new ChordMethod(f);
+        try
+        {
+            double root = solve.FindRoot(1, 1.5);
+            Console.WriteLine("Корiнь: " + root);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}

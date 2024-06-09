@@ -1,0 +1,85 @@
+using System;
+public class ATD
+{
+    private char[] Elements;
+    private int Size;
+    private int MaxSize = 100;
+    public ATD()
+    {
+        Elements = new char[MaxSize];
+        Size = 0;
+    }
+    public void Add(char element)
+    {
+        if (Size < MaxSize && !Elements.Contains(element))
+        {
+            Elements[Size] = element;
+            Size++;
+        }
+    }
+    public static ATD operator +(ATD a, ATD b)
+    {
+        ATD c = new ATD();
+        for (int i = 0; i < a.Size; i++)
+        {
+            c.Add(a.Elements[i]);
+        }
+        for (int i = 0; i < b.Size; i++)
+        {
+            c.Add(b.Elements[i]);
+        }
+        return c;
+    }
+    public static string operator <=(ATD a, ATD b)
+    {
+        for (int i = 0; i < a.Size; i++)
+        {
+            if (!b.Elements.Contains(a.Elements[i]))
+            {
+                return "Hi";
+            }
+        }
+        return "Так";
+    }
+    public static string operator >=(ATD a, ATD b)
+    {
+        return b <= a;
+    }
+    public override string ToString()
+    {
+        return "{" + string.Join(", ", Elements.Take(Size)) + "}";
+    }
+}
+class Program
+{
+    static void Main(string[] args)
+    {
+        ATD a = new ATD();
+        a.Add('a');
+        a.Add('b');
+        a.Add('c');
+        a.Add('x');
+        a.Add('y');
+        a.Add('z');
+        Console.WriteLine("Множина a: " + a);
+        ATD b = new ATD();
+        b.Add('c');
+        b.Add('b');
+        b.Add('e');
+        b.Add('x');
+        b.Add('l');
+        Console.WriteLine("Множина b: " + b);
+        ATD c = new ATD();
+        c.Add('c');
+        c.Add('b');
+        c.Add('y');
+        c.Add('x');
+        Console.WriteLine("Множина c: " + c);
+        ATD d = a + b;
+        Console.WriteLine("Об'єднання множин a i b: " + d);
+        string e = a <= c;
+        Console.WriteLine("Множина a менше або дорiвнює множинi c? " + e);
+        string f = a >= c;
+        Console.WriteLine("Множина a бiльше або дорiвнює множинi c? " + f);
+    }
+}

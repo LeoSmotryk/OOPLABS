@@ -1,0 +1,72 @@
+using System;
+public interface IShape
+{
+    void DisplayShapeType();
+    void DisplayShapeArea();
+    double Dimension1 { get; set; }
+}
+public interface IColoredShape : IShape
+{
+    string Color { get; set; }
+    void DisplayShapeColor();
+}
+public class Circle : IShape
+{
+    public double Radius { get; set; }
+    public double Dimension1
+    {
+        get => Radius;
+        set => Radius = value;
+    }
+    public Circle(double radius)
+    {
+        Radius = radius;
+    }
+    public void DisplayShapeType()
+    {
+        Console.WriteLine("Це коло.");
+    }
+    public void DisplayShapeArea()
+    {
+        double area = Math.PI * Math.Pow(Radius, 2);
+        Console.WriteLine($"Площа: {area}");
+    }
+}
+public class ColoredCircle : Circle, IColoredShape
+{
+    public string Color { get; set; }
+    public ColoredCircle(double radius, string color) : base(radius)
+    {
+        Color = color;
+    }
+    public void DisplayShapeColor()
+    {
+        Console.WriteLine($"Колiр: {Color}");
+    }
+}
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        Circle c1 = new Circle(2);
+        Circle c2 = new Circle(7);
+        Circle c3 = new Circle(13);
+        ColoredCircle cc1 = new ColoredCircle(3, "Синiй");
+        ColoredCircle cc2 = new ColoredCircle(11, "Бiлий");
+        ColoredCircle cc3 = new ColoredCircle(17, "Сiрий");
+        IShape[] shapes = new IShape[] {c1, c2, c3, cc1, cc2, cc3 };
+        ExecuteMethods(shapes);
+    }
+    public static void ExecuteMethods(IShape[] shapes)
+    {
+        foreach (var shape in shapes)
+        {
+            shape.DisplayShapeType();
+            shape.DisplayShapeArea();
+            if (shape is IColoredShape coloredShape)
+            {
+                coloredShape.DisplayShapeColor();
+            }
+        }
+    }
+}

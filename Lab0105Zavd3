@@ -1,0 +1,127 @@
+using System;
+interface IMensClothes
+{
+    void DressMan();
+}
+interface IWomensClothes
+{
+    void DressWoman();
+}
+abstract class Clothes
+{
+    public string Size { get; set; }
+    public double Price { get; set; }
+    public string Color { get; set; }
+    public Clothes(string size, double price, string color)
+    {
+        Size = size;
+        Price = price;
+        Color = color;
+    }
+    public override string ToString()
+    {
+        return $"розмiр: {Size}, цiна: {Price}, колiр: {Color}";
+    }
+}
+class TShirt : Clothes, IMensClothes, IWomensClothes
+{
+    public TShirt(string size, double price, string color) : base(size, price, color) { }
+    public void DressMan()
+    {
+        Console.WriteLine($"Чоловiча футболка - {this}");
+    }
+    public void DressWoman()
+    {
+        Console.WriteLine($"Жiноча футболка - {this}");
+    }
+}
+class Pants : Clothes, IMensClothes, IWomensClothes
+{
+    public Pants(string size, double price, string color) : base(size, price, color) { }
+    public void DressMan()
+    {
+        Console.WriteLine($"Чоловiчi штани - {this}");
+    }
+    public void DressWoman()
+    {
+        Console.WriteLine($"Жiночi штани - {this}");
+    }
+}
+class Skirt : Clothes, IWomensClothes
+{
+    public Skirt(string size, double price, string color) : base(size, price, color) { }
+    public void DressWoman()
+    {
+        Console.WriteLine($"Спiдниця - {this}");
+    }
+}
+class Tie : Clothes, IMensClothes
+{
+    public Tie(string size, double price, string color) : base(size, price, color) { }
+    public void DressMan()
+    {
+        Console.WriteLine($"Краватка - {this}");
+    }
+}
+class Shop
+{
+    public enum Size { XXS = 32, XS = 34, S = 36, M = 38, L = 40}
+    public static string getDescription(Size size)
+    {
+        if (size == Size.XXS)
+        {
+            return "Дитячий розмiр";
+        }
+        else
+        {
+            return "Дорослий розмiр";
+        }
+    }
+    public int EuroSize { get; set; }
+
+    public Shop(int euroSize)
+    {
+        EuroSize = euroSize;
+    }
+}
+
+class Atelier
+{
+    public static void DressWoman(Clothes[] clothes)
+    {
+        foreach (var item in clothes)
+        {
+            if (item is IWomensClothes)
+            {
+                ((IWomensClothes)item).DressWoman();
+            }
+        }
+    }
+    public static void DressMan(Clothes[] clothes)
+    {
+        foreach (var item in clothes)
+        {
+            if (item is IMensClothes)
+            {
+                ((IMensClothes)item).DressMan();
+            }
+        }
+    }
+}
+class Program
+{
+    static void Main(string[] args)
+    {
+        Clothes[] clothes = new Clothes[]
+        {
+            new TShirt("XSS", 100, "жовтий"),
+            new Pants("40", 550, "чорний"),
+            new Skirt("S", 450, "коричневий"),
+            new Tie("38", 100, "синiй")
+        };
+        Console.WriteLine("Жiночий одяг:");
+        Atelier.DressWoman(clothes);
+        Console.WriteLine("Чоловiчий одяг:");
+        Atelier.DressMan(clothes);
+    }
+}

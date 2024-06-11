@@ -1,0 +1,113 @@
+using System;
+public class Photo
+{
+    public string Name { get; set; }
+    public Photo(string name)
+    {
+        Name = name;
+    }
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+            return false;
+        Photo other = (Photo)obj;
+        return Name == other.Name;
+    }
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode();
+    }
+    public override string ToString()
+    {
+        return $"Фотографiя: {Name}.";
+    }
+}
+public class Page
+{
+    private List<Photo> photos;
+    public Page()
+    {
+        photos = new List<Photo>();
+    }
+    public void AddPhoto(Photo photo)
+    {
+        photos.Add(photo);
+    }
+    public int GetPhotoCount()
+    {
+        return photos.Count;
+    }
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+            return false;
+        Page other = (Page)obj;
+        return photos.Equals(other.photos);
+    }
+    public override int GetHashCode()
+    {
+        return photos.GetHashCode();
+    }
+    public override string ToString()
+    {
+        return $"Сторiнка з {photos.Count} фотографiями.";
+    }
+}
+public class PhotoAlbum
+{
+    private List<Page> pages;
+    public PhotoAlbum()
+    {
+        pages = new List<Page>();
+    }
+    public void AddPhotoToAlbum(Photo photo)
+    {
+        if (pages.Count == 0 || pages[pages.Count - 1].GetPhotoCount() >= 4)
+        {
+            pages.Add(new Page());
+        }
+        pages[pages.Count - 1].AddPhoto(photo);
+    }
+    public int GetTotalPhotoCount()
+    {
+        int totalCount = 0;
+        foreach (var page in pages)
+        {
+            totalCount += page.GetPhotoCount();
+        }
+        return totalCount;
+    }
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+            return false;
+        PhotoAlbum other = (PhotoAlbum)obj;
+        return pages.Equals(other.pages);
+    }
+    public override int GetHashCode()
+    {
+        return pages.GetHashCode();
+    }
+    public override string ToString()
+    {
+        return $"Фотоальбом має {pages.Count} сторiнок i {GetTotalPhotoCount()} фотографiй.";
+    }
+}
+class Program
+{
+    static void Main()
+    {
+        PhotoAlbum album = new PhotoAlbum();
+        Photo photo1 = new Photo("19-тий День народження");
+        Photo photo2 = new Photo("Афiни 1");
+        Photo photo3 = new Photo("Крит");
+        Photo photo4 = new Photo("Афiни 2");
+        Photo photo5 = new Photo("Афiни 3");
+        album.AddPhotoToAlbum(photo1);
+        album.AddPhotoToAlbum(photo2);
+        album.AddPhotoToAlbum(photo3);
+        album.AddPhotoToAlbum(photo4);
+        album.AddPhotoToAlbum(photo5);
+        Console.WriteLine($"Загальна кiлькiсть фотографiй: {album.GetTotalPhotoCount()}.");
+    }
+}

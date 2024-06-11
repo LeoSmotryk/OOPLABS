@@ -1,0 +1,129 @@
+using System;
+public abstract class TQuadrangle
+{
+    public abstract double CalculateArea();
+    public abstract double CalculatePerimeter();
+    public virtual void Input() { }
+    public virtual void Output() { }
+}
+public class Rectangle : TQuadrangle
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+    public Rectangle(double width, double height)
+    {
+        Width = width;
+        Height = height;
+    }
+    public override double CalculateArea()
+    {
+        return Width * Height;
+    }
+    public override double CalculatePerimeter()
+    {
+        return 2 * (Width + Height);
+    }
+    public override void Input()
+    {
+        Console.Write("Введiть ширину прямокутника: ");
+        Width = double.Parse(Console.ReadLine());
+        Console.Write("Введiть висоту прямокутника: ");
+        Height = double.Parse(Console.ReadLine());
+    }
+    public override void Output()
+    {
+        Console.WriteLine($"Прямокутник: ширина - {Width}, висота - {Height}, площа - {CalculateArea()}, периметр - {CalculatePerimeter()}.");
+    }
+}
+public class Square : Rectangle
+{
+    public Square(double side) : base(side, side) { }
+    public override void Input()
+    {
+        Console.Write("Введiть сторону квадрата: ");
+        double side = double.Parse(Console.ReadLine());
+        Width = Height = side;
+    }
+    public override void Output()
+    {
+        Console.WriteLine($"Квадрат: сторона - {Width}, площа - {CalculateArea()}, периметр - {CalculatePerimeter()}.");
+    }
+}
+public class Parallelogram : TQuadrangle
+{
+    public double Base { get; set; }
+    public double Height { get; set; }
+    public double Side { get; set; }
+    public Parallelogram(double baseLength, double height, double side)
+    {
+        Base = baseLength;
+        Height = height;
+        Side = side;
+    }
+    public override double CalculateArea()
+    {
+        return Base * Height;
+    }
+    public override double CalculatePerimeter()
+    {
+        return 2 * (Base + Side);
+    }
+    public override void Input()
+    {
+        Console.Write("Введiть основу паралелограма: ");
+        Base = double.Parse(Console.ReadLine());
+        Console.Write("Введiть висоту паралелограма: ");
+        Height = double.Parse(Console.ReadLine());
+        Console.Write("Введiть сторону паралелограма: ");
+        Side = double.Parse(Console.ReadLine());
+    }
+    public override void Output()
+    {
+        Console.WriteLine($"Паралелограм: основа - {Base}, висота - {Height}, сторона - {Side}, площа - {CalculateArea()}, периметр - {CalculatePerimeter()}.");
+    }
+}
+class Program
+{
+    static void Main(string[] args)
+    {
+        Random random = new Random();
+        int n = 10;
+        int a;
+        TQuadrangle[] quadrangles = new TQuadrangle[n];
+        for (int i = 0; i < n; i++)
+        {
+            int type = random.Next(3);
+            switch (type)
+            {
+                case 0:
+                    quadrangles[i] = new Rectangle(random.Next(1, 20), random.Next(1, 20));
+                    break;
+                case 1:
+                    quadrangles[i] = new Square(random.Next(1, 20));
+                    break;
+                case 2:
+                    quadrangles[i] = new Parallelogram(random.Next(1, 20), a = random.Next(1, 20), random.Next(a, 20));
+                    break;
+            }
+        }
+        foreach (TQuadrangle quadrangle in quadrangles)
+        {
+            quadrangle.Output();
+        }
+        double totalArea = 0;
+        double totalPerimeter = 0;
+        foreach (TQuadrangle quadrangle in quadrangles)
+        {
+            if (quadrangle is Rectangle || quadrangle is Square)
+            {
+                totalArea += quadrangle.CalculateArea();
+            }
+            else if (quadrangle is Parallelogram)
+            {
+                totalPerimeter += quadrangle.CalculatePerimeter();
+            }
+        }
+        Console.WriteLine($"Сума площ прямокутникiв та квадратiв: {totalArea}.");
+        Console.WriteLine($"Сума периметрiв паралелограмiв: {totalPerimeter}.");
+    }
+}

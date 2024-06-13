@@ -1,0 +1,141 @@
+using System;
+public class KilkistSekundException : Exception
+{
+    public KilkistSekundException(string message) : base(message) { }
+}
+public class NazvaException : Exception
+{
+    public NazvaException(string message) : base(message) { }
+}
+public class Company
+{
+    public string Name { get; set; }
+    public Company(string name)
+    {
+        Name = name;
+    }
+}
+public class Tariff
+{
+    public string Name { get; set; }
+    public int SubscriberCount { get; set; }
+    public Tariff(string name, int subscriberCount)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new NazvaException("Назва тарифу не може бути порожньою.");
+            }
+            Name = name;
+            SubscriberCount = subscriberCount;
+        }
+        catch (NazvaException ex)
+        {
+            Console.WriteLine("Неможливо створити тариф – не вказано назву.");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Сталася помилка: {ex.Message}");
+            throw;
+        }
+    }
+    public virtual double CalculateCallCost(int seconds)
+    {
+        return 0;
+    }
+}
+public class PerSecondTariff : Tariff
+{
+    public double Cost { get; set; }
+    public PerSecondTariff(string name, int subscriberCount, double cost) : base(name, subscriberCount)
+    {
+        Cost = cost;
+    }
+    public override double CalculateCallCost(int seconds)
+    {
+        try
+        {
+            if (seconds < 0)
+            {
+                throw new KilkistSekundException("Кiлькiсть секунд не може бути вiд'ємною.");
+            }
+            return seconds * Cost;
+        }
+        catch (KilkistSekundException ex)
+        {
+            Console.WriteLine($"Помилка: {ex.Message}");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Сталася помилка: {ex.Message}");
+            throw;
+        }
+    }
+}
+public class PerMinuteTariff : Tariff
+{
+    public double Cost { get; set; }
+    public PerMinuteTariff(string name, int subscriberCount, double cost) : base(name, subscriberCount)
+    {
+        Cost = cost;
+    }
+    public override double CalculateCallCost(int seconds)
+    {
+        try
+        {
+            if (seconds < 0)
+            {
+                throw new KilkistSekundException("Кiлькiсть секунд не може бути вiд'ємною.");
+            }
+            int minutes = (seconds + 59) / 60;
+            return minutes * Cost;
+        }
+        catch (KilkistSekundException ex)
+        {
+            Console.WriteLine($"Помилка: {ex.Message}");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Сталася помилка: {ex.Message}");
+            throw;
+        }
+    }
+}
+public class Subscriber
+{
+    public string FullName { get; set; }
+    public string PhoneNumber { get; set; }
+    public double AccountBalance { get; set; }
+    public Subscriber(string fullName, string phoneNumber, double accountBalance)
+    {
+        FullName = fullName;
+        PhoneNumber = phoneNumber;
+        AccountBalance = accountBalance;
+    }
+}
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        Tariff invalidTariff = new Tariff("Студентський", 100);
+        Company company = new Company("Київстар");
+        PerSecondTariff sectariff = new PerSecondTariff("Посекундний тариф", 10000, 0.1);
+        PerMinuteTariff mintariff = new PerMinuteTariff("Похвилинний тариф", 5000, 2.00);
+        Subscriber subscriber = new Subscriber("Смотриковський Леонiд", "+380976543210", 5.00);
+        int d = 357;
+        double costsec = sectariff.CalculateCallCost(d);
+        double costmin = mintariff.CalculateCallCost(d);
+        Console.WriteLine($"Компанiя: {company.Name}");
+        Console.WriteLine($"Абонент: {subscriber.FullName}, номер телефона: {subscriber.PhoneNumber}, баланс: {subscriber.AccountBalance}");
+        Console.WriteLine($"Тривалiсть дзвiнка: {d} секунд");
+        Console.WriteLine($"Цiна з {sectariff.Name}: {costsec}");
+        Console.WriteLine($"Цiна з {mintariff.Name}: {costmin}");
+        int nd = -10;
+        double ncostsec = sectariff.CalculateCallCost(nd);
+        double ncostmin = mintariff.CalculateCallCost(nd);
+    }
+}

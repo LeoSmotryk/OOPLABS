@@ -1,0 +1,187 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+public class CollectionType<T> : IEnumerable<T>
+{
+    private List<T> items;
+    public CollectionType()
+    {
+        items = new List<T>();
+    }
+    public CollectionType(IEnumerable<T> collection)
+    {
+        items = new List<T>(collection);
+    }
+    public void Add(T item)
+    {
+        items.Add(item);
+    }
+    public bool Remove(T item)
+    {
+        return items.Remove(item);
+    }
+    public T this[int index]
+    {
+        get { return items[index]; }
+        set { items[index] = value; }
+    }
+    public int Count
+    {
+        get { return items.Count; }
+    }
+    public void Sort()
+    {
+        items.Sort();
+    }
+    public IEnumerable<T> Where(Func<T, bool> predicate)
+    {
+        return items.Where(predicate);
+    }
+    public void ShowAll()
+    {
+        foreach (var item in items)
+        {
+            Console.WriteLine(item);
+        }
+    }
+    public IEnumerator<T> GetEnumerator()
+    {
+        return items.GetEnumerator();
+    }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+}
+public class Processor : IComparable<Processor>
+{
+    public string Proc { get; set; }
+    public int Chastota { get; set; }
+    public string Ram { get; set; }
+    public string Type { get; set; }
+    public Processor(string proc = "", int chastota = 0, string ram = "", string type = "")
+    {
+        Proc = proc;
+        Chastota = chastota;
+        Ram = ram;
+        Type = type;
+    }
+    public void Show()
+    {
+        string ramValue = string.IsNullOrEmpty(Ram) ? string.Empty : Ram;
+        string typeValue = string.IsNullOrEmpty(Type) ? string.Empty : Type;
+        Console.WriteLine($"| {Proc,-15} | {Chastota,-14} | {ramValue,-8} | {typeValue,-3} |");
+    }
+    public int CompareTo(Processor other)
+    {
+        if (other == null) return 1;
+        return Chastota.CompareTo(other.Chastota);
+    }
+    public override string ToString()
+    {
+        return $"Processor: {Proc}, Chastota: {Chastota}, Ram: {Ram}, Type: {Type}";
+    }
+}
+class Program
+{
+    public static void Main()
+    {
+        CollectionType<Processor>[] processorCollections = {
+        new CollectionType<Processor>(new List<Processor>
+        {
+            new Processor("Pentium-III", 233, "", "C"),
+            new Processor("Intel Core i5", 2500, "8GB", "L"),
+            new Processor("AMD Ryzen 5", 3600, "16GB", "L")
+        }),
+        new CollectionType<Processor>(new List<Processor>
+        {
+            new Processor("AMD-K6", 166, "", "C"),
+            new Processor("Pentium-III", 233, "", "C"),
+            new Processor("Intel Core i7", 3700, "16GB", "L")
+        }),
+        new CollectionType<Processor>(new List<Processor>
+        {
+            new Processor("PowerPC-620", 2000, "", "R"),
+            new Processor("Intel Core i9", 4500, "32GB", "L"),
+            new Processor("AMD Ryzen 7", 3800, "32GB", "L")
+        }),
+        new CollectionType<Processor>(new List<Processor>
+        {
+            new Processor("Pentium-III", 233, "", "C"),
+            new Processor("AMD-K6", 166, "", "C"),
+            new Processor("AMD Ryzen 9", 4900, "64GB", "L")
+        })
+        };
+        foreach (var collection in processorCollections)
+        {
+            collection.Sort();
+            Console.WriteLine("Вiдсортована колекцiя:");
+            collection.ShowAll();
+            Console.WriteLine();
+        }
+        string elementToFind1 = "Pentium-III";
+        var count = processorCollections.Count(collection => collection.Any(processor => processor.Proc == elementToFind1));
+        Console.WriteLine($"Кiлькiсть колекцiй, якi мiстять: '{elementToFind1}': {count}");
+        string elementToFind2 = "AMD Ryzen 7";
+        var maxCollection = processorCollections
+            .Where(collection => collection.Any(processor => processor.Proc == elementToFind2))
+            .OrderByDescending(collection => collection.Count)
+            .FirstOrDefault();
+        if (maxCollection != null)
+        {
+            Console.WriteLine("Колекцiя максимальної довжини, яка мiстить: '" + elementToFind2 + "':");
+            maxCollection.ShowAll();
+        }
+        else
+        {
+            Console.WriteLine("Колекцiй, які мiстять '" + elementToFind2 + "' не знайдено");
+        }
+        var query1 = processorCollections
+              .SelectMany(collection => collection.Where(processor => processor.Type == "L" && processor.Chastota > 4000))
+              .OrderByDescending(processor => processor.Chastota)
+              .Select(processor => new { Name = processor.Proc, Speed = processor.Chastota, RAM = processor.Ram });
+        Console.WriteLine("Процесори типу L з частотою бiльше 4000:");
+        foreach (var item in query1)
+        {
+            Console.WriteLine($"Назва: {item.Name}, частота: {item.Speed}, RAM: {item.RAM}");
+        }
+        Console.WriteLine();
+        var query2 = processorCollections
+            .Select(collection => collection.Max())
+            .Select(processor => new { Processor = processor, Type = processor.Type });
+        Console.WriteLine("Процесори з максимальної колекцiї:");
+        foreach (var item in query2)
+        {
+            Console.WriteLine($"Тип: {item.Type}, процесор: {item.Processor.Proc}, частоа: {item.Processor.Chastota}, RAM: {item.Processor.Ram}");
+        }
+        Console.WriteLine();
+        var query3 = processorCollections
+            .SelectMany(collection => collection.Where(processor => processor.Ram == "16GB"))
+            .GroupBy(processor => processor.Ram)
+            .Select(group => new { RAM = group.Key, Count = group.Count(), AverageSpeed = group.Average(processor => processor.Chastota) });
+        foreach (var item in query3)
+        {
+            Console.WriteLine($"RAM: {item.RAM}, кiлькiсть: {item.Count}, середня частота: {item.AverageSpeed}");
+        }
+        Console.WriteLine();
+        var query4 = processorCollections
+            .SelectMany(collection => collection)
+            .OrderByDescending(processor => processor.Chastota)
+            .First();
+        Console.WriteLine($"Процесор з максимальною частотою: {query4.Proc}, частота: {query4.Chastota}, RAM: {query4.Ram}, тип: {query4.Type}");
+        Console.WriteLine();
+        var query5 = processorCollections
+            .SelectMany(collection => collection)
+            .FirstOrDefault(processor => processor.Ram == "64GB" || processor.Ram == "32GB");
+        if (query5 != null)
+        {
+            Console.WriteLine($"Перший процесор з RAM 64GB або 32GB: {query5.Proc}, частота: {query5.Chastota}, RAM: {query5.Ram}, тип: {query5.Type}");
+        }
+        else
+        {
+            Console.WriteLine("Процесор з RAM 64GB або 32GB не знайдено");
+        }
+    }
+}

@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+class Program
+{
+    static void Main(string[] args)
+    {
+        Dictionary<int, string> stringDictionary = new Dictionary<int, string>()
+            {
+                { 1, "Пам'ять" },
+                { 2, "Комп'ютер" },
+                { 3, "Програмування" },
+                { 4, "Мова програмування" },
+                { 5, "Процесор" },
+                { 6, "Монiтор" },
+                { 7, "Миша" },
+                { 8, "Клавiатура" }
+            };
+        Console.WriteLine("Вмiст словника:");
+        foreach (var item in stringDictionary)
+        {
+            Console.WriteLine($"{item.Key}: {item.Value}");
+        }
+        string searchString = "е";
+        var foundStrings = stringDictionary.Values.Where(s => s.Contains(searchString)).ToList();
+        Console.WriteLine($"\nРядки, що мiстять '{searchString}':");
+        foreach (var str in foundStrings)
+        {
+            Console.WriteLine(str);
+        }
+        int n = 8;
+        var countLengthN = stringDictionary.Values.Count(s => s.Length == n);
+        Console.WriteLine($"\nКiлькiсть рядкiв довжини {n}: {countLengthN}");
+        var sortedAscending = stringDictionary.Values.OrderBy(s => s).ToList();
+        Console.WriteLine("\nСортування у зростаючому порядку:");
+        foreach (var str in sortedAscending)
+        {
+            Console.WriteLine(str);
+        }
+        var sortedDescending = stringDictionary.Values.OrderByDescending(s => s).ToList();
+        Console.WriteLine("\nСортування у спадному порядку:");
+        foreach (var str in sortedDescending)
+        {
+            Console.WriteLine(str);
+        }
+    }
+}

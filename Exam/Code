@@ -1,0 +1,73 @@
+using System;
+public interface Lamp
+{
+    string LampType { get; set; }
+    string LampProducer { get; set; }
+    int Power { get; set; }
+    string Kind { get; set; }
+    int Count { get; set; }
+    void DisplayLampInfo();
+    void ChangePower(int newpower);
+}
+public interface Camera
+{
+    string CameraType { get; set; }
+    string CameraProducer { get; set; }
+    int Photosensitivity { get; set; }
+    void DisplayCameraInfo();
+    void ChangePhotosensitivity(int newphotosensitivity);
+}
+public class PhotoStudio : Lamp, Camera
+{
+    public string LampType { get; set; }
+    public string LampProducer { get; set; }
+    public int Power { get; set; }
+    public string Kind { get; set; }
+    public int Count { get; set; }
+    public string CameraType { get; set; }
+    public string CameraProducer { get; set; }
+    public int Photosensitivity { get; set; }
+    public PhotoStudio(string lamptype, string lampproducer, int power, string kind, int count, string cameratype, string cameraproducer, int photosensitivity)
+    {
+        LampType = lamptype;
+        LampProducer = lampproducer;
+        Power = power;
+        Kind = kind;
+        Count = count;
+        CameraType = cameratype;
+        CameraProducer = cameraproducer;
+        Photosensitivity = photosensitivity;
+    }
+    public void DisplayLampInfo()
+    {
+        Console.WriteLine($"Лампа: тип: {LampType}, виробник: {LampProducer}, потужнiсть: {Power} лм, вид освiтлювального елемента: {Kind}, кiлькiсть освiтлювальних елементiв: {Count}.");
+    }
+    public void ChangePower(int newpower)
+    {
+        Power = newpower;
+        Console.WriteLine($"Потужнiсть змiнено на {newpower}.");
+    }
+    public void DisplayCameraInfo()
+    {
+        Console.WriteLine($"Камера: тип: {CameraType}, виробник: {CameraProducer}, свiтлочутливiсть оптичного об'єктиву: {Photosensitivity}.");
+    }
+    public void ChangePhotosensitivity(int newphotosensitivity)
+    {
+        Photosensitivity = newphotosensitivity;
+        Console.WriteLine($"Свiтлочутливiсть змiнено на {newphotosensitivity}.");
+    }
+}
+class Program
+{
+    public static void Main()
+    {
+        PhotoStudio ps1 = new PhotoStudio("свiтлодiодна прямокутна", "Massa", 1100, "LED", 2, "електронна", "Nikon", 6900);
+        PhotoStudio ps2 = new PhotoStudio("свiтлодiодна прямокутна", "Massa", 1000, "LED", 1, "дзеркальна", "Canon", 7400);
+        ps1.DisplayLampInfo();
+        ps1.DisplayCameraInfo();
+        ps2.DisplayLampInfo();
+        ps2.DisplayCameraInfo();
+        ps1.ChangePhotosensitivity(7900);
+        ps1.DisplayCameraInfo();
+    }
+}
